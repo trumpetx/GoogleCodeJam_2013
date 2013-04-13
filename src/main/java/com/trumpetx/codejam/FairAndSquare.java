@@ -15,14 +15,7 @@ public class FairAndSquare {
 
     static BufferedReader r;
     static File outputFile;
-    private static List<BigInteger> FAIR_AND_SQUARE_TEN_TO_14TH /*= Arrays.asList(
-            new BigInteger("1"),
-            new BigInteger("4"),
-            new BigInteger("9"),
-            new BigInteger("121"),
-            new BigInteger("484"),
-            new BigInteger("44944")
-    )*/;
+    static List<BigInteger> FAIR_AND_SQUARE_TEN_TO_14TH;
 
 
     public static void main(String[] args) throws Exception {
@@ -33,7 +26,7 @@ public class FairAndSquare {
 
         int testCases = Integer.parseInt(r.readLine());
 
-        FAIR_AND_SQUARE_TEN_TO_14TH = fairAndSquareFigureItOut(-1, /*String[] boundaries = r.readLine().split(" ");*/ new String[]{"1", "100000000000000"});
+        FAIR_AND_SQUARE_TEN_TO_14TH = fairAndSquareFigureItOut(-1, new String[]{"1","100000000000000"});
 
         for(int i=1; i<=testCases; i++){
             fairAndSquareFast(i);
@@ -50,6 +43,8 @@ public class FairAndSquare {
         for(BigInteger fairAndSquare : FAIR_AND_SQUARE_TEN_TO_14TH){
             if(fairAndSquare.compareTo(lowerBound) > -1 && fairAndSquare.compareTo(upperBound) < 1){
                 numberOfFairAndSquare++;
+            } else if (fairAndSquare.compareTo(upperBound) == 1){
+                break;
             }
         }
 
@@ -65,8 +60,6 @@ public class FairAndSquare {
 
         BigInteger sqrtFloor = sqrt(new BigDecimal(boundaries[0]), 5).toBigInteger();
         BigInteger upperBoundFloor = sqrt(new BigDecimal(boundaries[1]), 5).toBigInteger();
-        //System.out.println("Upper Bound: "+upperBound + " / " + upperBoundFloor);
-        //System.out.println("Lower Bound: "+lowerBound + " / " + sqrtFloor);
 
         if(sqrtFloor.multiply(sqrtFloor).compareTo(lowerBound) == -1){
             sqrtFloor = sqrtFloor.add(BigInteger.ONE);
@@ -78,11 +71,9 @@ public class FairAndSquare {
 
         while(sqrtFloor.compareTo(upperBoundFloor) <= 0){
             if(isPalindrome(sqrtFloor.toString())){
-                //System.out.print(".");
                 BigInteger mommaSquare = sqrtFloor.multiply(sqrtFloor);
                 if(isPalindrome(mommaSquare.toString()) && mommaSquare.compareTo(upperBound) < 1){
                     numberOfFairAndSquare++;
-                    //System.out.println("new BigInteger(\"" + mommaSquare + "\"), ");
                     bigInts.add(mommaSquare);
                 }
             }
@@ -98,7 +89,7 @@ public class FairAndSquare {
     private static boolean isPalindrome(String str){
         char[] potential = str.toCharArray();
         for(int i=0; i< str.length()/2; i++){
-            if(potential[i] != potential[potential.length-1]){
+            if(potential[i] != potential[potential.length-1-i]){
                 return false;
             }
         }
