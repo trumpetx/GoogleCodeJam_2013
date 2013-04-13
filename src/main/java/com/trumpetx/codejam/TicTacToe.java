@@ -12,12 +12,13 @@ public class TicTacToe {
     static BufferedReader r;
     static char[] line;
     static File outputFile;
+    //col1, col2, col3, col4, row1, row2, row3, row4, diagonal top left to lower right, diagonal top right to lower left
     static byte[] winners = new byte[]{3, 3, 3, 3, 3, 3, 3, 3, 3, 3};
 
     public static void main(String[] args) throws Exception {
-        File f = new File(args[0]);
+        File f = new File(args.length > 0 ? args[0] : "test.txt");
         r = new BufferedReader(new FileReader(f));
-        outputFile = new File(args[1]);
+        outputFile = new File(args.length > 1 ? args[1] : "results.txt");
         outputFile.delete();
 
         int times = Integer.parseInt(r.readLine());
@@ -46,18 +47,16 @@ public class TicTacToe {
 
                     winners[col] &= val;
                     winners[row + 4] &= val;
-
                 }
-
             }
             for (byte possibility : winners) {
                 switch (possibility) {
                     case 1:
-                        output(new StringBuffer("Case #").append(i + 1).append(": X won").toString());
+                        output(new StringBuffer("Case #").append(i + 1).append(": X won"));
                         reset();
                         continue testcase;
                     case 2:
-                        output(new StringBuffer("Case #").append(i + 1).append(": O won").toString());
+                        output(new StringBuffer("Case #").append(i + 1).append(": O won"));
                         reset();
                         continue testcase;
                 }
@@ -71,9 +70,9 @@ public class TicTacToe {
         }
     }
 
-    private static void output(String out) throws Exception {
-        FileUtils.write(outputFile, out + "\n", "UTF-8", true);
-        System.out.println(out);
+    private static void output(StringBuffer out) throws Exception {
+        FileUtils.write(outputFile, out.append("\n"), "UTF-8", true);
+        System.out.print(out);
     }
 
     private static void reset() throws Exception {
